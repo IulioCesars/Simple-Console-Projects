@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore FoldersToZip
     - name: Build
       run: dotnet publish FoldersToZip -c Release -r win-x64 -o "Releases\FoldersToZip"
     - name: Upload a Build Artifact

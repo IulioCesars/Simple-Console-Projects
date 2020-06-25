@@ -6,6 +6,8 @@
     <PublishTrimmed>true</PublishTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <Version>1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

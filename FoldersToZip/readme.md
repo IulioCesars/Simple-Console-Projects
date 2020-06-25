@@ -12,6 +12,9 @@ Directory where will search subfolders to compress
 Directory where the application will save all zip files
 In case if it is not specified, the application will use the same value of the "sourceFolder" parameter
 
+### Prefix for Zips (Optional)
+Prefix to use in generates Zips
+
 ## How to exectue
 
 ### Windows

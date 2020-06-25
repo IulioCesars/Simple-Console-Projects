@@ -2,24 +2,36 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 
 namespace FoldersToZip
 {
     class Program
     {
         private static ConsoleManager consoleManager;
+        private static readonly string[] helpArgs;
 
         static Program()
         {
             consoleManager = new ConsoleManager();
+            helpArgs = new string[] { "-h", "--h", "/h", "-help", "--help", "/help" };
         }
 
         static void Main(string[] args)
         {
             try
             {
+                var containsHelpArg = args.Any(it => helpArgs.Any(x => x.Contains(it, StringComparison.OrdinalIgnoreCase)));
+                if (containsHelpArg)
+                {
+                    ShowHelp();
+                    return;
+                }
+
                 string sourceFolder = args.ElementAtOrDefault(0);
                 string targetFolder = args.ElementAtOrDefault(1);
+                string prefix = args.ElementAtOrDefault(2);
+
 
                 if (!ValidateDirectories(sourceFolder, targetFolder, out string errorMessage))
                 {
@@ -35,7 +47,7 @@ namespace FoldersToZip
                     var directory = directories[i];
                     var directoryName = new DirectoryInfo(directory).Name;
 
-                    var filePath = Path.Combine(targetFolder, $"{directoryName}.zip");
+                    var filePath = Path.Combine(targetFolder, $"{prefix}{directoryName}.zip");
 
                     if (File.Exists(filePath))
                     { File.Delete(filePath); }
@@ -50,6 +62,20 @@ namespace FoldersToZip
             {
                 consoleManager.WriteLine("Unexpected Exception: " + ex.GetBaseException().Message, TypeMessage.Error);
             }
+        }
+
+        private static void ShowHelp() 
+        {
+            consoleManager.WriteLine("This program compress all subfolders in zip format");
+            consoleManager.WriteLine("- - - - -");
+            consoleManager.WriteLine("");
+            consoleManager.WriteLine("Arg 1: Source Folder");
+            consoleManager.WriteLine("Arg 2: Target Folder");
+            consoleManager.WriteLine("Arg 3 (Optional): Prefix for zips");
+
+            var assembly = Assembly.GetExecutingAssembly().GetName();
+            consoleManager.WriteLine("");
+            consoleManager.WriteLine($"{assembly.Name} - {assembly.Version}");
         }
 
         private static bool ValidateDirectories(string sourceFolder, string targetFolder, out string errorMessage)
